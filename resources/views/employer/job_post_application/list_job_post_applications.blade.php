@@ -56,7 +56,7 @@
 
                     <div class="card-footer">
                         <p class="mb-0" style="font-size: 14px;">Max Applicants: {{ $job_post->max_applicants }}</p>
-                        <p class="mb-0" style="font-size: 14px;">Approved
+                        <p class="mb-0" style="font-size: 14px;">Hired
                             Applicants: {{ $job_post->approved_applicants }}</p>
                     </div>
                 </div>

@@ -76,6 +76,14 @@
                                             Apply for Position
                                         </button>
                                     </span>
+                                @elseif(!$job_post->allowsApplication())
+                                    <span data-toggle="tooltip"
+                                          data-placement="right"
+                                          title="Max applicant limit has been reached for this job post">
+                                        <button type="button" class="btn btn-primary mr-2" disabled>
+                                            Apply for Position
+                                        </button>
+                                    </span>
                                 @else
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
                                             data-target="#submit_application_{{ $job_post->id }}">

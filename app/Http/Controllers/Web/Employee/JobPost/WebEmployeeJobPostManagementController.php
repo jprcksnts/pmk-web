@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Employee\JobPost;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Core\JobPost\JobPostController;
 use App\Models\JobPost\JobPost;
 use App\Models\JobPost\JobPostApplication;
 
@@ -11,9 +12,11 @@ class WebEmployeeJobPostManagementController extends Controller
     public function displayListPage()
     {
         if (request()->query('position') != null) {
-            $job_posts = JobPost::where('position', 'like', '%' . request()->query('position') . '%')
+            $job_posts = JobPost::with('jobPostApplications')
+                ->where('position', 'like', '%' . request()->query('position') . '%')
                 ->orderBy('created_at', 'desc')
                 ->get();
+
         } else {
             $job_posts = JobPost::orderBy('created_at', 'desc')->get();
         }

@@ -1,4 +1,4 @@
-<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-gradient-white"
+<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-lg navbar-light bg-gradient-white d-none d-lg-block"
      id="sidenav-main">
     <div class="scrollbar-inner">
         <div class="sidenav-header d-flex align-items-center">
@@ -6,7 +6,7 @@
                 P.E.S.O Makati
             </a>
 
-            <div class="ml-auto">
+            <div class="d-none d-lg-block">
                 <div class="sidenav-toggler" data-action="sidenav-unpin" data-target="#sidenav-main">
                     <div class="sidenav-toggler-inner">
                         <i class="sidenav-toggler-line"></i>
@@ -16,6 +16,7 @@
                 </div>
             </div>
         </div>
+
         <div class="navbar-inner">
             <div class="collapse navbar-collapse" id="sidenav-collapse-main">
                 <ul class="navbar-nav">

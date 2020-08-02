@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'encrypt' => false,
+    'encrypt' => ((strtolower(config('app.env')) == 'production' || strtolower(config('app.env')) == 'uat')) ? true : false,
 
     /*
     |--------------------------------------------------------------------------
@@ -168,7 +168,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => env('SESSION_SECURE_COOKIE', ((strtolower(config('app.env')) == 'production' || strtolower(config('app.env')) == 'uat')) ? true : false),
 
     /*
     |--------------------------------------------------------------------------

@@ -50,7 +50,9 @@
                                     </div>
 
                                     <div class="form-group mb-0">
-                                        <label for="max_applicants">Max Applicants (minimum of 1)</label>
+                                        <label for="max_applicants">
+                                            Max Applicants (minimum of 1)
+                                        </label>
                                         <input id="max_applicants" name="max_applicants" type="number"
                                                class="form-control"
                                                min="1" minlength="1" maxlength="3"

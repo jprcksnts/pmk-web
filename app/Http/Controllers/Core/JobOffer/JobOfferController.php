@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Core\JobOffer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Core\Notification\NotificationController;
 use App\Models\Employee\Employee;
 use App\Models\Employee\EmployeeCompanyHistory;
 use App\Models\JobOffer\JobOffer;
 use App\Models\JobOffer\JobOfferStatus;
 use App\Models\JobOffer\JobOfferUpdate;
+use App\Models\JobPost\JobPost;
 use App\Models\JobPost\JobPostApplication;
 use App\Models\JobPost\JobPostApplicationStatus;
+use App\Models\Notification\NotificationType;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -47,6 +50,11 @@ class JobOfferController extends Controller
 
                 $job_post_application->job_post_application_status_id = JobPostApplicationStatus::$SENT_JOB_OFFER;
                 $job_post_application->save();
+
+                $sender_id = $job_offer->employer->user->id;
+                $recipient_id = $job_offer->employee->user->id;
+                $company_name = $job_offer->employer->company->name;
+                NotificationController::createNotification($sender_id, $recipient_id, NotificationType::$JOB_OFFER_RECEIVED, "New job offer from $company_name");
 
                 DB::commit();
 
@@ -119,6 +127,10 @@ class JobOfferController extends Controller
                 $job_offer->job_offer_status_id = JobOfferStatus::$ACCEPTED;
                 $job_offer->save();
 
+                $job_post = JobPost::where('id', $job_offer->job_post_id)->first();
+                $job_post->approved_applicants++;
+                $job_post->save();
+
                 $job_post_application = JobPostApplication::where('id', $job_offer->job_post_application_id)->first();
                 $job_post_application->job_post_application_status_id = JobPostApplicationStatus::$HIRED;
                 $job_post_application->save();
@@ -136,6 +148,11 @@ class JobOfferController extends Controller
                 $employee = Employee::where('id', $job_offer->employee_id)->first();
                 $employee->company_id = $job_offer->company_id;
                 $employee->save();
+
+                $sender_id = $job_offer->employee->user->id;
+                $recipient_id = $job_offer->employer->user->id;
+                $sender_name = $job_offer->employee->user->userDetail->name();
+                NotificationController::createNotification($sender_id, $recipient_id, NotificationType::$JOB_OFFER_RECEIVED, "Job offer accepted by $sender_name");
 
                 DB::commit();
 
@@ -208,6 +225,11 @@ class JobOfferController extends Controller
                 $job_offer_update->job_offer_id = $job_offer_id;
                 $job_offer_update->description = 'Job offer rejected.';
                 $job_offer_update->save();
+
+                $sender_id = $job_offer->employee->user->id;
+                $recipient_id = $job_offer->employer->user->id;
+                $sender_name = $job_offer->employee->user->userDetail->name();
+                NotificationController::createNotification($sender_id, $recipient_id, NotificationType::$JOB_OFFER_RECEIVED, "Job offer rejected by $sender_name");
 
                 DB::commit();
 

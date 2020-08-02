@@ -3,6 +3,7 @@
 namespace App\Models\JobOffer;
 
 use App\Models\Employee\Employee;
+use App\Models\Employer\Employer;
 use App\Models\JobPost\JobPost;
 use App\Models\JobPost\JobPostApplication;
 use Illuminate\Database\Eloquent\Model;
@@ -54,6 +55,11 @@ class JobOffer extends Model
     public function jobPostApplication()
     {
         return $this->belongsTo(JobPostApplication::class);
+    }
+
+    public function employer()
+    {
+        return $this->belongsTo(Employer::class);
     }
 
     public function employee()

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Core\JobPost;
 
 use App\Http\Controllers\Controller;
 use App\Models\JobPost\JobPost;
+use App\Models\JobPost\JobPostApplication;
+use App\Models\JobPost\JobPostApplicationStatus;
 use App\Models\JobPost\JobPostStatus;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
@@ -73,8 +75,11 @@ class JobPostController extends Controller
                 // job post exists
                 DB::beginTransaction();
 
-                if ($job_post->approved_applicants <= $max_applicants) {
-                    // if max applicants is within valid range (cannot be less than approved applicants)
+                $job_post_applicant_count = JobPostApplication::where('job_post_id', $job_post_id)
+                    ->whereNotIn('job_post_application_status_id', [JobPostApplicationStatus::$CANCELLED, JobPostApplicationStatus::$REJECTED, JobPostApplicationStatus::$RETRACTED_JOB_OFFER])
+                    ->count();
+                if ($job_post_applicant_count <= $max_applicants) {
+                    // if max applicants is within valid range (cannot be less than current job applicants)
                     $job_post->employer_id = $employer_id;
                     $job_post->position = $position;
                     $job_post->description = $description;
@@ -188,5 +193,28 @@ class JobPostController extends Controller
         }
 
         return $response;
+    }
+
+    public static function filterMaxedOutApplications($job_posts)
+    {
+        foreach ($job_posts as $index => $job_post) {
+            $job_post_applications = $job_post->jobPostApplications;
+
+            $max_applicants = $job_post->max_applicants;
+            $applicants_count = 0;
+            foreach ($job_post_applications as $job_post_application) {
+
+                if ($job_post_application->job_post_application_status_id == JobPostApplicationStatus::$CANCELLED || $job_post_application->job_post_application_status_id == JobPostApplicationStatus::$REJECTED || $job_post_application->job_post_application_status_id == JobPostApplicationStatus::$RETRACTED_JOB_OFFER) {
+                } else {
+                    $applicants_count++;
+                }
+            }
+
+            if ($applicants_count >= $max_applicants) {
+                $job_posts->forget($index);
+            }
+        }
+
+        return $job_posts;
     }
 }

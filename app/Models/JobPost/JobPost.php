@@ -66,4 +66,13 @@ class JobPost extends Model
 
         return false;
     }
+
+    public function allowsApplication()
+    {
+        $job_post_applications_count = JobPostApplication::where('job_post_id', $this->id)
+            ->whereNotIn('job_post_application_status_id', [JobPostApplicationStatus::$CANCELLED, JobPostApplicationStatus::$REJECTED, JobPostApplicationStatus::$RETRACTED_JOB_OFFER])
+            ->count();
+
+        return ($this->max_applicants > $job_post_applications_count) ? true : false;
+    }
 }

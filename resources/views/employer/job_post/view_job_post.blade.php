@@ -57,7 +57,7 @@
                             <b>Max Applicants:</b> {{ $job_post->max_applicants }}
                         </p>
                         <p class="mr-4 mb-0" style="font-size: 14px;">
-                            <b>Approved Applicants:</b> {{ $job_post->approved_applicants }}
+                            <b>Hired Applicants:</b> {{ $job_post->approved_applicants }}
                         </p>
                     </div>
 

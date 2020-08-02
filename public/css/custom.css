@@ -8,6 +8,14 @@
     src: url("../fonts/montserrat/Montserrat-Medium.ttf");
 }
 
+@media screen and (min-width: 520px) {
+    .dropdown-notifications {
+        width: 520px !important;
+        max-height: 520px;
+        overflow: auto;
+    }
+}
+
 .primary-font {
     font-family: montserrat-regular, sans-serif;
 }
@@ -51,6 +59,10 @@ ol.breadcrumb-custom > li > a:hover {
 
 .bg-transluscent {
     background-color: rgba(192, 192, 192, 0.15);
+}
+
+.bg-transluscent-dark {
+    background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
 .border-rounded {
